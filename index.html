@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gieo Quẻ Kinh Dịch 6 Hào</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1510;
+            --ink-soft: #3d3429;
+            --cinnabar: #9b1b1b;
+            --cinnabar-deep: #6e1010;
+            --paper: #e8dfd0;
+            --paper-warm: #f3ebe0;
+            --line: #2a2218;
+            --moving: #c0392b;
+            --mist: rgba(26, 21, 16, 0.08);
+            --glow: rgba(155, 27, 27, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Be Vietnam Pro", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(155, 27, 27, 0.14), transparent 55%),
+                radial-gradient(ellipse 60% 40% at 100% 100%, rgba(42, 34, 24, 0.12), transparent 50%),
+                linear-gradient(165deg, #f7f1e8 0%, #e4d8c4 45%, #d9cbb5 100%);
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.35;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
+            z-index: 0;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 40px 20px 56px;
+            text-align: center;
+        }
+
+        .brand {
+            font-family: "Noto Serif", serif;
+            font-size: clamp(2rem, 6vw, 2.75rem);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            line-height: 1.15;
+            margin: 0 0 8px;
+            color: var(--ink);
+            animation: fadeRise 0.7s ease both;
+        }
+
+        .brand span {
+            display: block;
+            font-size: 0.42em;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--cinnabar);
+            margin-bottom: 10px;
+        }
+
+        .lead {
+            margin: 0 auto 28px;
+            max-width: 36ch;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: var(--ink-soft);
+            animation: fadeRise 0.7s ease 0.1s both;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 28px;
+            animation: fadeRise 0.7s ease 0.18s both;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 13px 26px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        #btnCast {
+            background: var(--cinnabar);
+            color: #fff8f0;
+            box-shadow: 0 8px 24px var(--glow);
+        }
+
+        #btnCast:hover:not(:disabled) {
+            background: var(--cinnabar-deep);
+        }
+
+        #btnCast:disabled {
+            background: #a89a88;
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.75;
+        }
+
+        #btnReset {
+            background: var(--ink);
+            color: var(--paper-warm);
+            display: none;
+        }
+
+        #btnReset:hover {
+            background: #000;
+        }
+
+        .hexagram-display {
+            display: flex;
+            flex-direction: column-reverse;
+            margin: 0 auto 8px;
+            width: min(100%, 280px);
+            gap: 10px;
+            min-height: 0;
+        }
+
+        .line {
+            display: grid;
+            grid-template-columns: 52px 1fr 110px;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--ink-soft);
+            animation: lineIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .line-bar {
+            height: 14px;
+            width: 100%;
+        }
+
+        .yang {
+            background: var(--line);
+            height: 100%;
+            width: 100%;
+            border-radius: 1px;
+        }
+
+        .yin {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: space-between;
+        }
+
+        .yin div {
+            background: var(--line);
+            width: 44%;
+            height: 100%;
+            border-radius: 1px;
+        }
+
+        .yang.moving,
+        .yin .moving {
+            background: var(--moving);
+            box-shadow: 0 0 0 1px rgba(192, 57, 43, 0.25);
+        }
+
+        .line-type {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .result-box {
+            margin-top: 28px;
+            text-align: left;
+            padding: 22px 0 0;
+            border-top: 1px solid rgba(42, 34, 24, 0.18);
+            display: none;
+            animation: fadeRise 0.55s ease both;
+        }
+
+        .result-box.visible {
+            display: block;
+        }
+
+        .result-box h3 {
+            font-family: "Noto Serif", serif;
+            font-size: 1.15rem;
+            margin: 0 0 14px;
+            letter-spacing: 0.04em;
+        }
+
+        .result-row {
+            margin: 0 0 10px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .result-row strong {
+            color: var(--cinnabar-deep);
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .copy-block {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px dashed rgba(42, 34, 24, 0.25);
+        }
+
+        .copy-block label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--ink-soft);
+        }
+
+        .copy-container {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        .copy-input {
+            flex: 1;
+            min-width: 0;
+            padding: 11px 12px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            border: 1px solid rgba(42, 34, 24, 0.22);
+            border-radius: 2px;
+            background: rgba(255, 252, 247, 0.85);
+            color: var(--ink);
+        }
+
+        .btn-copy {
+            background: #1f4d32;
+            color: #f3fff6;
+            font-size: 0.875rem;
+            padding: 10px 16px;
+            white-space: nowrap;
+        }
+
+        .btn-copy:hover {
+            background: #163824;
+        }
+
+        .copy-msg {
+            color: #1f4d32;
+            font-size: 0.78rem;
+            margin-top: 6px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .copy-msg.show {
+            display: block;
+            animation: fadeRise 0.25s ease both;
+        }
+
+        @keyframes fadeRise {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes lineIn {
+            from {
+                opacity: 0;
+                transform: scaleX(0.88) translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: scaleX(1) translateY(0);
+            }
+        }
+
+        @media (max-width: 420px) {
+            .line {
+                grid-template-columns: 40px 1fr 96px;
+                font-size: 0.68rem;
+            }
+
+            .copy-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <h1 class="brand"><span>Kinh Dịch</span>Gieo Quẻ 6 Hào</h1>
+        <p class="lead">Nhấp nút bên dưới để gieo từng hào — từ Sơ Hào đến Thượng Hào — bằng phương pháp ba đồng xu.</p>
+
+        <div class="actions">
+            <button id="btnCast" type="button">Gieo Hào (0/6)</button>
+            <button id="btnReset" type="button">Gieo Lại</button>
+        </div>
+
+        <div class="hexagram-display" id="hexDisplay" aria-live="polite"></div>
+
+        <div class="result-box" id="resultBox">
+            <h3>Kết quả quẻ</h3>
+            <p class="result-row"><strong>Quẻ Chủ:</strong> <span id="queChu"></span></p>
+            <p class="result-row"><strong>Hào Động:</strong> <span id="haoDong"></span></p>
+            <p class="result-row"><strong>Quẻ Biến:</strong> <span id="queBien"></span></p>
+
+            <div class="copy-block">
+                <label for="summaryText">Tóm tắt kết quả (để copy)</label>
+                <div class="copy-container">
+                    <input type="text" id="summaryText" class="copy-input" readonly />
+                    <button type="button" id="btnCopy" class="btn-copy">Sao chép</button>
+                </div>
+                <div id="copyMsg" class="copy-msg">Đã sao chép vào bộ nhớ tạm.</div>
+            </div>
+        </div>
+    </main>
+
+<script>
+const TRIGRAMS = {
+    "111": "Càn", "011": "Đoài", "101": "Ly", "001": "Chấn",
+    "110": "Tốn", "010": "Khảm", "100": "Cấn", "000": "Khôn"
+};
+
+const HEXAGRAMS = {
+    "Càn_Càn": "Thuần Càn", "Khôn_Khôn": "Thuần Khôn", "Khảm_Chấn": "Thủy Lôi Truân", "Cấn_Khảm": "Sơn Thủy Mông",
+    "Khảm_Càn": "Thủy Thiên Nhu", "Càn_Khảm": "Thiên Thủy Tụng", "Khảm_Khôn": "Thủy Địa Sư", "Khôn_Khảm": "Địa Thủy Tỷ",
+    "Tốn_Càn": "Phong Thiên Tiểu Súc", "Càn_Đoài": "Thiên Trạch Lý", "Khôn_Càn": "Địa Thiên Thái", "Càn_Khôn": "Thiên Địa Bĩ",
+    "Càn_Ly": "Thiên Hỏa Đồng Nhân", "Ly_Càn": "Hỏa Thiên Đại Hữu", "Khôn_Cấn": "Địa Sơn Khiêm", "Chấn_Khôn": "Lôi Địa Dự",
+    "Đoài_Chấn": "Trạch Lôi Tùy", "Cấn_Tốn": "Sơn Phong Cổ", "Khôn_Đoài": "Địa Trạch Lâm", "Tốn_Khôn": "Phong Địa Quán",
+    "Ly_Chấn": "Hỏa Lôi Phệ Hạp", "Cấn_Ly": "Sơn Hỏa Bôn", "Cấn_Khôn": "Sơn Địa Bác", "Khôn_Chấn": "Địa Lôi Phục",
+    "Càn_Chấn": "Thiên Lôi Vô Vọng", "Cấn_Càn": "Sơn Thiên Đại Súc", "Cấn_Chấn": "Sơn Lôi Di", "Đoài_Tốn": "Trạch Phong Đại Quá",
+    "Khảm_Khảm": "Thuần Khảm", "Ly_Ly": "Thuần Ly", "Đoài_Cấn": "Trạch Sơn Hàm", "Chấn_Tốn": "Lôi Phong Hằng",
+    "Càn_Cấn": "Thiên Sơn Độn", "Chấn_Càn": "Lôi Thiên Đại Tráng", "Khôn_Ly": "Địa Hỏa Minh Di", "Ly_Khôn": "Hỏa Địa Tấn",
+    "Tốn_Ly": "Phong Hỏa Gia Nhân", "Ly_Đoài": "Hỏa Trạch Khuê", "Khảm_Cấn": "Thủy Sơn Kiển", "Chấn_Khảm": "Lôi Thủy Giải",
+    "Cấn_Đoài": "Sơn Trạch Tổn", "Tốn_Chấn": "Phong Lôi Ích", "Đoài_Càn": "Trạch Thiên Quái", "Càn_Tốn": "Thiên Phong Cấu",
+    "Đoài_Khôn": "Trạch Địa Tụy", "Khôn_Tốn": "Địa Phong Thăng", "Đoài_Khảm": "Trạch Thủy Khốn", "Khảm_Tốn": "Thủy Phong Tỉnh",
+    "Đoài_Ly": "Trạch Hỏa Cách", "Ly_Tốn": "Hỏa Phong Đỉnh", "Chấn_Chấn": "Thuần Chấn", "Cấn_Cấn": "Thuần Cấn",
+    "Tốn_Cấn": "Phong Sơn Tiệm", "Chấn_Đoài": "Lôi Trạch Quy Muội", "Chấn_Ly": "Lôi Hỏa Phong", "Ly_Cấn": "Hỏa Sơn Lữ",
+    "Tốn_Tốn": "Thuần Tốn", "Đoài_Đoài": "Thuần Đoài", "Tốn_Khảm": "Phong Thủy Hoán", "Khảm_Đoài": "Thủy Trạch Tiết",
+    "Tốn_Đoài": "Phong Trạch Trung Phu", "Chấn_Cấn": "Lôi Sơn Tiểu Quá", "Khảm_Ly": "Thủy Hỏa Ký Tế", "Ly_Khảm": "Hỏa Thủy Vị Tế"
+};
+
+let currentLines = [];
+
+const btnCast = document.getElementById("btnCast");
+const btnReset = document.getElementById("btnReset");
+const btnCopy = document.getElementById("btnCopy");
+
+btnCast.addEventListener("click", castLine);
+btnReset.addEventListener("click", resetAll);
+btnCopy.addEventListener("click", copySummary);
+
+function castLine() {
+    if (currentLines.length >= 6) return;
+
+    const coin1 = Math.random() < 0.5 ? 2 : 3;
+    const coin2 = Math.random() < 0.5 ? 2 : 3;
+    const coin3 = Math.random() < 0.5 ? 2 : 3;
+    const sum = coin1 + coin2 + coin3;
+
+    currentLines.push(sum);
+    renderLines();
+
+    btnCast.textContent = `Gieo Hào (${currentLines.length}/6)`;
+
+    if (currentLines.length === 6) {
+        btnCast.disabled = true;
+        btnReset.style.display = "inline-block";
+        calculateResult();
+    }
+}
+
+function renderLines() {
+    const display = document.getElementById("hexDisplay");
+    display.innerHTML = "";
+
+    currentLines.forEach((val, idx) => {
+        const lineDiv = document.createElement("div");
+        lineDiv.className = "line";
+        lineDiv.style.animationDelay = `${idx * 0.04}s`;
+
+        const isMoving = val === 6 || val === 9;
+        const movingClass = isMoving ? "moving" : "";
+        let barHtml;
+
+        if (val === 7 || val === 9) {
+            barHtml = `<div class="line-bar"><div class="yang ${movingClass}"></div></div>`;
+        } else {
+            barHtml = `<div class="line-bar"><div class="yin"><div class="${movingClass}"></div><div class="${movingClass}"></div></div></div>`;
+        }
+
+        const typeName =
+            val === 6 ? "Lão Âm (X)" :
+            val === 7 ? "Thiếu Dương" :
+            val === 8 ? "Thiếu Âm" :
+            "Lão Dương (O)";
+
+        lineDiv.innerHTML = `
+            <span>Hào ${idx + 1}</span>
+            ${barHtml}
+            <span class="line-type">${typeName}</span>
+        `;
+        display.appendChild(lineDiv);
+    });
+}
+
+function calculateResult() {
+    const chuBit = [];
+    const bienBit = [];
+    const movingLines = [];
+
+    currentLines.forEach((val, index) => {
+        if (val === 6) {
+            chuBit.push(0);
+            bienBit.push(1);
+            movingLines.push(index + 1);
+        } else if (val === 7) {
+            chuBit.push(1);
+            bienBit.push(1);
+        } else if (val === 8) {
+            chuBit.push(0);
+            bienBit.push(0);
+        } else if (val === 9) {
+            chuBit.push(1);
+            bienBit.push(0);
+            movingLines.push(index + 1);
+        }
+    });
+
+    const chuNoi = TRIGRAMS[`${chuBit[2]}${chuBit[1]}${chuBit[0]}`];
+    const chuNgoai = TRIGRAMS[`${chuBit[5]}${chuBit[4]}${chuBit[3]}`];
+    const nameQueChu = HEXAGRAMS[`${chuNgoai}_${chuNoi}`] || `${chuNgoai} ${chuNoi}`;
+
+    const bienNoi = TRIGRAMS[`${bienBit[2]}${bienBit[1]}${bienBit[0]}`];
+    const bienNgoai = TRIGRAMS[`${bienBit[5]}${bienBit[4]}${bienBit[3]}`];
+    const nameQueBien = HEXAGRAMS[`${bienNgoai}_${bienNoi}`] || `${bienNgoai} ${bienNoi}`;
+
+    document.getElementById("queChu").textContent = `${nameQueChu} (${chuNgoai} trên, ${chuNoi} dưới)`;
+    document.getElementById("haoDong").textContent =
+        movingLines.length > 0 ? `Hào ${movingLines.join(", ")}` : "Không có hào động";
+    document.getElementById("queBien").textContent =
+        movingLines.length > 0
+            ? `${nameQueBien} (${bienNgoai} trên, ${bienNoi} dưới)`
+            : "Không biến";
+
+    const summaryText =
+        movingLines.length > 0
+            ? `${nameQueChu} động hào ${movingLines.join(", ")} biến ${nameQueBien}`
+            : `${nameQueChu} (Tĩnh - Không có hào động)`;
+
+    document.getElementById("summaryText").value = summaryText;
+    document.getElementById("resultBox").classList.add("visible");
+    document.getElementById("copyMsg").classList.remove("show");
+}
+
+function copySummary() {
+    const summaryInput = document.getElementById("summaryText");
+    const text = summaryInput.value;
+    if (!text) return;
+
+    const showOk = () => {
+        const msg = document.getElementById("copyMsg");
+        msg.classList.add("show");
+        setTimeout(() => msg.classList.remove("show"), 2000);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(showOk).catch(() => {
+            summaryInput.select();
+            document.execCommand("copy");
+            showOk();
+        });
+    } else {
+        summaryInput.select();
+        document.execCommand("copy");
+        showOk();
+    }
+}
+
+function resetAll() {
+    currentLines = [];
+    document.getElementById("hexDisplay").innerHTML = "";
+    document.getElementById("resultBox").classList.remove("visible");
+    document.getElementById("summaryText").value = "";
+    document.getElementById("copyMsg").classList.remove("show");
+    btnCast.disabled = false;
+    btnCast.textContent = "Gieo Hào (0/6)";
+    btnReset.style.display = "none";
+}
+</script>
+</body>
+</html>
