@@ -92,7 +92,7 @@
             flex-wrap: wrap;
             gap: 10px;
             justify-content: center;
-            margin-bottom: 28px;
+            margin: 24px 0 8px;
             animation: fadeRise 0.7s ease 0.18s both;
         }
 
@@ -107,7 +107,7 @@
             transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
         }
 
-        button:active:not(:disabled) {
+        button:active {
             transform: translateY(1px);
         }
 
@@ -117,31 +117,14 @@
             box-shadow: 0 8px 24px var(--glow);
         }
 
-        #btnCast:hover:not(:disabled) {
+        #btnCast:hover {
             background: var(--cinnabar-deep);
-        }
-
-        #btnCast:disabled {
-            background: #a89a88;
-            box-shadow: none;
-            cursor: not-allowed;
-            opacity: 0.75;
-        }
-
-        #btnReset {
-            background: var(--ink);
-            color: var(--paper-warm);
-            display: none;
-        }
-
-        #btnReset:hover {
-            background: #000;
         }
 
         .hexagram-display {
             display: flex;
             flex-direction: column-reverse;
-            margin: 0 auto 8px;
+            margin: 8px auto 0;
             width: min(100%, 280px);
             gap: 10px;
             min-height: 0;
@@ -320,14 +303,13 @@
 <body>
     <main class="page">
         <h1 class="brand"><span>Kinh Dịch</span>Gieo Quẻ 6 Hào</h1>
-        <p class="lead">Nhấp nút bên dưới để gieo từng hào — từ Sơ Hào đến Thượng Hào — bằng phương pháp ba đồng xu.</p>
+        <p class="lead">Gieo từng hào từ Sơ đến Thượng bằng phương pháp ba đồng xu. Sau hào 6, nhấn Gieo Hào lần nữa để bắt đầu quẻ mới.</p>
+
+        <div class="hexagram-display" id="hexDisplay" aria-live="polite"></div>
 
         <div class="actions">
             <button id="btnCast" type="button">Gieo Hào (0/6)</button>
-            <button id="btnReset" type="button">Gieo Lại</button>
         </div>
-
-        <div class="hexagram-display" id="hexDisplay" aria-live="polite"></div>
 
         <div class="result-box" id="resultBox">
             <h3>Kết quả quẻ</h3>
@@ -374,15 +356,15 @@ const HEXAGRAMS = {
 let currentLines = [];
 
 const btnCast = document.getElementById("btnCast");
-const btnReset = document.getElementById("btnReset");
 const btnCopy = document.getElementById("btnCopy");
 
 btnCast.addEventListener("click", castLine);
-btnReset.addEventListener("click", resetAll);
 btnCopy.addEventListener("click", copySummary);
 
 function castLine() {
-    if (currentLines.length >= 6) return;
+    if (currentLines.length >= 6) {
+        resetAll();
+    }
 
     const coin1 = Math.random() < 0.5 ? 2 : 3;
     const coin2 = Math.random() < 0.5 ? 2 : 3;
@@ -395,8 +377,6 @@ function castLine() {
     btnCast.textContent = `Gieo Hào (${currentLines.length}/6)`;
 
     if (currentLines.length === 6) {
-        btnCast.disabled = true;
-        btnReset.style.display = "inline-block";
         calculateResult();
     }
 }
@@ -514,9 +494,7 @@ function resetAll() {
     document.getElementById("resultBox").classList.remove("visible");
     document.getElementById("summaryText").value = "";
     document.getElementById("copyMsg").classList.remove("show");
-    btnCast.disabled = false;
     btnCast.textContent = "Gieo Hào (0/6)";
-    btnReset.style.display = "none";
 }
 </script>
 </body>
