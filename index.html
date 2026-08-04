@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Gieo Quẻ Kinh Dịch 6 Hào</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +17,9 @@
             --paper-warm: #f3ebe0;
             --line: #2a2218;
             --moving: #c0392b;
-            --mist: rgba(26, 21, 16, 0.08);
             --glow: rgba(155, 27, 27, 0.18);
+            --slot: rgba(42, 34, 24, 0.14);
+            --cast-bar-h: 88px;
         }
 
         * {
@@ -28,6 +29,7 @@
         body {
             margin: 0;
             min-height: 100vh;
+            min-height: 100dvh;
             font-family: "Be Vietnam Pro", sans-serif;
             color: var(--ink);
             background:
@@ -53,13 +55,13 @@
             z-index: 1;
             max-width: 560px;
             margin: 0 auto;
-            padding: 40px 20px 56px;
+            padding: 32px 20px calc(var(--cast-bar-h) + env(safe-area-inset-bottom, 0px) + 24px);
             text-align: center;
         }
 
         .brand {
             font-family: "Noto Serif", serif;
-            font-size: clamp(2rem, 6vw, 2.75rem);
+            font-size: clamp(1.85rem, 6vw, 2.55rem);
             font-weight: 700;
             letter-spacing: 0.04em;
             line-height: 1.15;
@@ -79,55 +81,21 @@
         }
 
         .lead {
-            margin: 0 auto 28px;
+            margin: 0 auto 24px;
             max-width: 36ch;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             line-height: 1.55;
             color: var(--ink-soft);
             animation: fadeRise 0.7s ease 0.1s both;
-        }
-
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin: 24px 0 8px;
-            animation: fadeRise 0.7s ease 0.18s both;
-        }
-
-        button {
-            font-family: inherit;
-            font-size: 0.95rem;
-            font-weight: 600;
-            padding: 13px 26px;
-            border: none;
-            border-radius: 2px;
-            cursor: pointer;
-            transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
-        }
-
-        button:active {
-            transform: translateY(1px);
-        }
-
-        #btnCast {
-            background: var(--cinnabar);
-            color: #fff8f0;
-            box-shadow: 0 8px 24px var(--glow);
-        }
-
-        #btnCast:hover {
-            background: var(--cinnabar-deep);
         }
 
         .hexagram-display {
             display: flex;
             flex-direction: column-reverse;
             margin: 8px auto 0;
-            width: min(100%, 280px);
+            width: min(100%, 300px);
             gap: 10px;
-            min-height: 0;
+            animation: fadeRise 0.7s ease 0.16s both;
         }
 
         .line {
@@ -137,12 +105,39 @@
             gap: 8px;
             font-size: 0.75rem;
             color: var(--ink-soft);
-            animation: lineIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+            min-height: 28px;
+        }
+
+        .line.empty {
+            opacity: 0.55;
+        }
+
+        .line.filled {
+            opacity: 1;
+            color: var(--ink-soft);
+        }
+
+        .line.filled .line-bar {
+            animation: lineFill 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         .line-bar {
             height: 14px;
             width: 100%;
+        }
+
+        .line-placeholder {
+            height: 100%;
+            width: 100%;
+            border-radius: 1px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--slot) 0,
+                var(--slot) 6px,
+                transparent 6px,
+                transparent 10px
+            );
+            border: 1px dashed rgba(42, 34, 24, 0.22);
         }
 
         .yang {
@@ -175,6 +170,55 @@
         .line-type {
             text-align: right;
             white-space: nowrap;
+        }
+
+        .cast-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+            background: linear-gradient(
+                180deg,
+                rgba(243, 235, 224, 0) 0%,
+                rgba(232, 223, 208, 0.92) 35%,
+                rgba(232, 223, 208, 0.98) 100%
+            );
+            pointer-events: none;
+        }
+
+        .cast-bar button {
+            pointer-events: auto;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 15px 36px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        #btnCast {
+            background: var(--cinnabar);
+            color: #fff8f0;
+            box-shadow: 0 8px 24px var(--glow);
+            min-width: 200px;
+        }
+
+        #btnCast:hover {
+            background: var(--cinnabar-deep);
         }
 
         .result-box {
@@ -277,21 +321,30 @@
             }
         }
 
-        @keyframes lineIn {
+        @keyframes lineFill {
             from {
-                opacity: 0;
-                transform: scaleX(0.88) translateY(6px);
+                opacity: 0.35;
+                transform: scaleX(0.92);
             }
             to {
                 opacity: 1;
-                transform: scaleX(1) translateY(0);
+                transform: scaleX(1);
             }
         }
 
         @media (max-width: 420px) {
+            .page {
+                padding-top: 24px;
+            }
+
             .line {
                 grid-template-columns: 40px 1fr 96px;
                 font-size: 0.68rem;
+            }
+
+            #btnCast {
+                width: min(100%, 320px);
+                min-width: 0;
             }
 
             .copy-container {
@@ -306,10 +359,6 @@
         <p class="lead">Gieo từng hào từ Sơ đến Thượng bằng phương pháp ba đồng xu. Sau hào 6, nhấn Gieo Hào lần nữa để bắt đầu quẻ mới.</p>
 
         <div class="hexagram-display" id="hexDisplay" aria-live="polite"></div>
-
-        <div class="actions">
-            <button id="btnCast" type="button">Gieo Hào (0/6)</button>
-        </div>
 
         <div class="result-box" id="resultBox">
             <h3>Kết quả quẻ</h3>
@@ -327,6 +376,10 @@
             </div>
         </div>
     </main>
+
+    <div class="cast-bar">
+        <button id="btnCast" type="button">Gieo Hào (0/6)</button>
+    </div>
 
 <script>
 const TRIGRAMS = {
@@ -353,13 +406,33 @@ const HEXAGRAMS = {
     "Tốn_Đoài": "Phong Trạch Trung Phu", "Chấn_Cấn": "Lôi Sơn Tiểu Quá", "Khảm_Ly": "Thủy Hỏa Ký Tế", "Ly_Khảm": "Hỏa Thủy Vị Tế"
 };
 
+const LINE_LABELS = ["Hào 1", "Hào 2", "Hào 3", "Hào 4", "Hào 5", "Hào 6"];
+
 let currentLines = [];
 
 const btnCast = document.getElementById("btnCast");
 const btnCopy = document.getElementById("btnCopy");
+const hexDisplay = document.getElementById("hexDisplay");
 
 btnCast.addEventListener("click", castLine);
 btnCopy.addEventListener("click", copySummary);
+
+initSlots();
+
+function initSlots() {
+    hexDisplay.innerHTML = "";
+    for (let i = 0; i < 6; i++) {
+        const lineDiv = document.createElement("div");
+        lineDiv.className = "line empty";
+        lineDiv.dataset.index = String(i);
+        lineDiv.innerHTML = `
+            <span>${LINE_LABELS[i]}</span>
+            <div class="line-bar"><div class="line-placeholder"></div></div>
+            <span class="line-type">Chưa gieo</span>
+        `;
+        hexDisplay.appendChild(lineDiv);
+    }
+}
 
 function castLine() {
     if (currentLines.length >= 6) {
@@ -372,7 +445,7 @@ function castLine() {
     const sum = coin1 + coin2 + coin3;
 
     currentLines.push(sum);
-    renderLines();
+    fillSlot(currentLines.length - 1, sum);
 
     btnCast.textContent = `Gieo Hào (${currentLines.length}/6)`;
 
@@ -381,38 +454,32 @@ function castLine() {
     }
 }
 
-function renderLines() {
-    const display = document.getElementById("hexDisplay");
-    display.innerHTML = "";
+function fillSlot(idx, val) {
+    const lineDiv = hexDisplay.querySelector(`[data-index="${idx}"]`);
+    if (!lineDiv) return;
 
-    currentLines.forEach((val, idx) => {
-        const lineDiv = document.createElement("div");
-        lineDiv.className = "line";
-        lineDiv.style.animationDelay = `${idx * 0.04}s`;
+    const isMoving = val === 6 || val === 9;
+    const movingClass = isMoving ? "moving" : "";
+    let barHtml;
 
-        const isMoving = val === 6 || val === 9;
-        const movingClass = isMoving ? "moving" : "";
-        let barHtml;
+    if (val === 7 || val === 9) {
+        barHtml = `<div class="yang ${movingClass}"></div>`;
+    } else {
+        barHtml = `<div class="yin"><div class="${movingClass}"></div><div class="${movingClass}"></div></div>`;
+    }
 
-        if (val === 7 || val === 9) {
-            barHtml = `<div class="line-bar"><div class="yang ${movingClass}"></div></div>`;
-        } else {
-            barHtml = `<div class="line-bar"><div class="yin"><div class="${movingClass}"></div><div class="${movingClass}"></div></div></div>`;
-        }
+    const typeName =
+        val === 6 ? "Lão Âm (X)" :
+        val === 7 ? "Thiếu Dương" :
+        val === 8 ? "Thiếu Âm" :
+        "Lão Dương (O)";
 
-        const typeName =
-            val === 6 ? "Lão Âm (X)" :
-            val === 7 ? "Thiếu Dương" :
-            val === 8 ? "Thiếu Âm" :
-            "Lão Dương (O)";
-
-        lineDiv.innerHTML = `
-            <span>Hào ${idx + 1}</span>
-            ${barHtml}
-            <span class="line-type">${typeName}</span>
-        `;
-        display.appendChild(lineDiv);
-    });
+    lineDiv.className = "line filled";
+    lineDiv.innerHTML = `
+        <span>${LINE_LABELS[idx]}</span>
+        <div class="line-bar">${barHtml}</div>
+        <span class="line-type">${typeName}</span>
+    `;
 }
 
 function calculateResult() {
@@ -490,7 +557,7 @@ function copySummary() {
 
 function resetAll() {
     currentLines = [];
-    document.getElementById("hexDisplay").innerHTML = "";
+    initSlots();
     document.getElementById("resultBox").classList.remove("visible");
     document.getElementById("summaryText").value = "";
     document.getElementById("copyMsg").classList.remove("show");
