@@ -14,17 +14,16 @@
             --cinnabar: #9b1b1b;
             --cinnabar-deep: #6e1010;
             --paper: #e8dfd0;
-            --paper-warm: #f3ebe0;
             --line: #2a2218;
             --moving: #c0392b;
             --glow: rgba(155, 27, 27, 0.18);
             --slot: rgba(42, 34, 24, 0.14);
             --cast-bar-h: 88px;
+            --coin-yang: #c9a227;
+            --coin-yin: #6b6358;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -55,7 +54,7 @@
             z-index: 1;
             max-width: 560px;
             margin: 0 auto;
-            padding: 32px 20px calc(var(--cast-bar-h) + env(safe-area-inset-bottom, 0px) + 24px);
+            padding: 28px 20px calc(var(--cast-bar-h) + env(safe-area-inset-bottom, 0px) + 24px);
             text-align: center;
         }
 
@@ -66,7 +65,6 @@
             letter-spacing: 0.04em;
             line-height: 1.15;
             margin: 0 0 8px;
-            color: var(--ink);
             animation: fadeRise 0.7s ease both;
         }
 
@@ -81,21 +79,129 @@
         }
 
         .lead {
-            margin: 0 auto 24px;
-            max-width: 36ch;
-            font-size: 0.92rem;
+            margin: 0 auto 20px;
+            max-width: 38ch;
+            font-size: 0.9rem;
             line-height: 1.55;
             color: var(--ink-soft);
             animation: fadeRise 0.7s ease 0.1s both;
         }
 
+        /* Progress: Sơ → Thượng */
+        .progress {
+            margin: 0 auto 18px;
+            max-width: 340px;
+            animation: fadeRise 0.7s ease 0.14s both;
+        }
+
+        .progress-labels {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+            margin-bottom: 6px;
+            font-size: 0.68rem;
+            color: var(--ink-soft);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .progress-track {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+        }
+
+        .progress-step {
+            height: 8px;
+            border-radius: 2px;
+            background: rgba(42, 34, 24, 0.12);
+            border: 1px solid rgba(42, 34, 24, 0.12);
+            transition: background 0.25s ease, border-color 0.25s ease;
+        }
+
+        .progress-step.done {
+            background: var(--cinnabar);
+            border-color: var(--cinnabar-deep);
+        }
+
+        .progress-step.current {
+            background: rgba(155, 27, 27, 0.45);
+            border-color: var(--cinnabar);
+            box-shadow: 0 0 0 2px rgba(155, 27, 27, 0.15);
+        }
+
+        /* Coins */
+        .coins {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin: 0 auto 18px;
+            min-height: 92px;
+            animation: fadeRise 0.7s ease 0.16s both;
+        }
+
+        .coin {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            line-height: 1.15;
+            border: 2px solid rgba(42, 34, 24, 0.25);
+            background: linear-gradient(145deg, #d4c4a8, #b8a78a);
+            color: var(--ink);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 12px rgba(26, 21, 16, 0.12);
+            transition: transform 0.2s ease, background 0.25s ease, border-color 0.25s ease;
+        }
+
+        .coin .coin-face {
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+        }
+
+        .coin .coin-val {
+            font-size: 1.15rem;
+            font-family: "Noto Serif", serif;
+        }
+
+        .coin.idle .coin-face { opacity: 0.55; }
+        .coin.idle .coin-val { opacity: 0.45; font-size: 0.95rem; }
+
+        .coin.yang {
+            background: linear-gradient(145deg, #e8c84a, #c9a227);
+            border-color: #a8841a;
+            color: #3a2c08;
+        }
+
+        .coin.yin {
+            background: linear-gradient(145deg, #8a8176, #5c554c);
+            border-color: #3d3832;
+            color: #f3ebe0;
+        }
+
+        .coin.flip {
+            animation: coinFlip 0.45s ease;
+        }
+
+        .coins-sum {
+            margin: -8px auto 16px;
+            font-size: 0.82rem;
+            color: var(--ink-soft);
+            min-height: 1.2em;
+            font-weight: 500;
+        }
+
+        /* Main casting slots */
         .hexagram-display {
             display: flex;
             flex-direction: column-reverse;
             margin: 8px auto 0;
             width: min(100%, 300px);
             gap: 10px;
-            animation: fadeRise 0.7s ease 0.16s both;
+            animation: fadeRise 0.7s ease 0.18s both;
         }
 
         .line {
@@ -108,23 +214,13 @@
             min-height: 28px;
         }
 
-        .line.empty {
-            opacity: 0.55;
-        }
-
-        .line.filled {
-            opacity: 1;
-            color: var(--ink-soft);
-        }
-
+        .line.empty { opacity: 0.55; }
+        .line.filled { opacity: 1; }
         .line.filled .line-bar {
             animation: lineFill 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
-        .line-bar {
-            height: 14px;
-            width: 100%;
-        }
+        .line-bar { height: 14px; width: 100%; }
 
         .line-placeholder {
             height: 100%;
@@ -172,6 +268,170 @@
             white-space: nowrap;
         }
 
+        /* Result */
+        .result-box {
+            margin-top: 28px;
+            text-align: left;
+            padding: 22px 0 0;
+            border-top: 1px solid rgba(42, 34, 24, 0.18);
+            display: none;
+            animation: fadeRise 0.55s ease both;
+        }
+
+        .result-box.visible { display: block; }
+
+        .result-box h3 {
+            font-family: "Noto Serif", serif;
+            font-size: 1.15rem;
+            margin: 0 0 12px;
+            letter-spacing: 0.04em;
+        }
+
+        .copy-block {
+            margin: 0 0 16px;
+            padding: 0;
+            border: none;
+        }
+
+        .copy-container {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+            position: relative;
+        }
+
+        .copy-input {
+            flex: 1;
+            min-width: 0;
+            padding: 11px 12px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            border: 1px solid rgba(42, 34, 24, 0.22);
+            border-radius: 2px;
+            background: rgba(255, 252, 247, 0.85);
+            color: var(--ink);
+        }
+
+        .btn-copy-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .btn-copy {
+            background: #1f4d32;
+            color: #f3fff6;
+            font-size: 0.875rem;
+            padding: 10px 16px;
+            white-space: nowrap;
+            height: 100%;
+        }
+
+        .btn-copy:hover { background: #163824; }
+
+        .copy-tooltip {
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 8px);
+            transform: translateX(-50%) translateY(4px);
+            background: var(--ink);
+            color: #f7f1e8;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 2px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 5;
+        }
+
+        .copy-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border: 5px solid transparent;
+            border-top-color: var(--ink);
+        }
+
+        .copy-tooltip.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Dual hexagram visuals */
+        .dual-hex {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin: 0 0 16px;
+        }
+
+        .dual-hex.has-bien {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .hex-card {
+            text-align: center;
+            padding: 12px 8px;
+            background: rgba(255, 252, 247, 0.45);
+            border: 1px solid rgba(42, 34, 24, 0.12);
+        }
+
+        .hex-card-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--cinnabar-deep);
+            margin-bottom: 6px;
+        }
+
+        .hex-card-name {
+            font-family: "Noto Serif", serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .hex-card-trigrams {
+            font-size: 0.72rem;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+        }
+
+        .mini-hex {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 6px;
+            width: 88px;
+            margin: 0 auto;
+        }
+
+        .mini-line { height: 8px; width: 100%; }
+        .mini-line .yang { height: 100%; }
+        .mini-line .yin {
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .mini-line .yin div { width: 42%; height: 100%; background: var(--line); }
+
+        .result-row {
+            margin: 0 0 8px;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .result-row strong {
+            color: var(--cinnabar-deep);
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
         .cast-bar {
             position: fixed;
             left: 0;
@@ -191,9 +451,7 @@
             pointer-events: none;
         }
 
-        .cast-bar button {
-            pointer-events: auto;
-        }
+        .cast-bar button { pointer-events: auto; }
 
         button {
             font-family: inherit;
@@ -206,9 +464,7 @@
             transition: transform 0.15s ease, background 0.2s ease;
         }
 
-        button:active {
-            transform: translateY(1px);
-        }
+        button:active { transform: translateY(1px); }
 
         #btnCast {
             background: var(--cinnabar);
@@ -217,163 +473,91 @@
             min-width: 200px;
         }
 
-        #btnCast:hover {
-            background: var(--cinnabar-deep);
-        }
-
-        .result-box {
-            margin-top: 28px;
-            text-align: left;
-            padding: 22px 0 0;
-            border-top: 1px solid rgba(42, 34, 24, 0.18);
-            display: none;
-            animation: fadeRise 0.55s ease both;
-        }
-
-        .result-box.visible {
-            display: block;
-        }
-
-        .result-box h3 {
-            font-family: "Noto Serif", serif;
-            font-size: 1.15rem;
-            margin: 0 0 14px;
-            letter-spacing: 0.04em;
-        }
-
-        .result-row {
-            margin: 0 0 10px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .result-row strong {
-            color: var(--cinnabar-deep);
-            font-weight: 600;
-            margin-right: 4px;
-        }
-
-        .copy-block {
-            margin-top: 18px;
-            padding-top: 16px;
-            border-top: 1px dashed rgba(42, 34, 24, 0.25);
-        }
-
-        .copy-block label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--ink-soft);
-        }
-
-        .copy-container {
-            display: flex;
-            gap: 8px;
-            align-items: stretch;
-        }
-
-        .copy-input {
-            flex: 1;
-            min-width: 0;
-            padding: 11px 12px;
-            font-family: inherit;
-            font-size: 0.875rem;
-            border: 1px solid rgba(42, 34, 24, 0.22);
-            border-radius: 2px;
-            background: rgba(255, 252, 247, 0.85);
-            color: var(--ink);
-        }
-
-        .btn-copy {
-            background: #1f4d32;
-            color: #f3fff6;
-            font-size: 0.875rem;
-            padding: 10px 16px;
-            white-space: nowrap;
-        }
-
-        .btn-copy:hover {
-            background: #163824;
-        }
-
-        .copy-msg {
-            color: #1f4d32;
-            font-size: 0.78rem;
-            margin-top: 6px;
-            display: none;
-            font-weight: 600;
-        }
-
-        .copy-msg.show {
-            display: block;
-            animation: fadeRise 0.25s ease both;
+        #btnCast:hover { background: var(--cinnabar-deep); }
+        #btnCast:disabled {
+            opacity: 0.65;
+            cursor: wait;
         }
 
         @keyframes fadeRise {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes lineFill {
-            from {
-                opacity: 0.35;
-                transform: scaleX(0.92);
-            }
-            to {
-                opacity: 1;
-                transform: scaleX(1);
-            }
+            from { opacity: 0.35; transform: scaleX(0.92); }
+            to { opacity: 1; transform: scaleX(1); }
+        }
+
+        @keyframes coinFlip {
+            0% { transform: rotateY(0) scale(1); }
+            45% { transform: rotateY(90deg) scale(1.06); }
+            100% { transform: rotateY(0) scale(1); }
         }
 
         @media (max-width: 420px) {
-            .page {
-                padding-top: 24px;
-            }
-
+            .page { padding-top: 20px; }
             .line {
                 grid-template-columns: 40px 1fr 96px;
                 font-size: 0.68rem;
             }
-
+            .coin { width: 64px; height: 64px; }
             #btnCast {
                 width: min(100%, 320px);
                 min-width: 0;
             }
-
-            .copy-container {
-                flex-direction: column;
-            }
+            .dual-hex.has-bien { gap: 10px; }
+            .hex-card-name { font-size: 0.82rem; }
+            .mini-hex { width: 72px; }
         }
     </style>
 </head>
 <body>
     <main class="page">
         <h1 class="brand"><span>Kinh Dịch</span>Gieo Quẻ 6 Hào</h1>
-        <p class="lead">Gieo từng hào từ Sơ đến Thượng bằng phương pháp ba đồng xu. Sau hào 6, nhấn Gieo Hào lần nữa để bắt đầu quẻ mới.</p>
+        <p class="lead">Gieo từng hào từ Sơ đến Thượng bằng ba đồng xu (Âm = 2, Dương = 3). Đủ 6 hào, nhấn Gieo Quẻ Mới để bắt đầu lại.</p>
+
+        <div class="progress" aria-label="Tiến trình 6 hào">
+            <div class="progress-labels">
+                <span>Sơ</span><span>II</span><span>III</span><span>IV</span><span>V</span><span>Thượng</span>
+            </div>
+            <div class="progress-track" id="progressTrack">
+                <div class="progress-step" data-step="0"></div>
+                <div class="progress-step" data-step="1"></div>
+                <div class="progress-step" data-step="2"></div>
+                <div class="progress-step" data-step="3"></div>
+                <div class="progress-step" data-step="4"></div>
+                <div class="progress-step" data-step="5"></div>
+            </div>
+        </div>
+
+        <div class="coins" id="coins" aria-live="polite">
+            <div class="coin idle" data-coin="0"><span class="coin-face">—</span><span class="coin-val">?</span></div>
+            <div class="coin idle" data-coin="1"><span class="coin-face">—</span><span class="coin-val">?</span></div>
+            <div class="coin idle" data-coin="2"><span class="coin-face">—</span><span class="coin-val">?</span></div>
+        </div>
+        <div class="coins-sum" id="coinsSum">Nhấn Gieo Hào để tung 3 đồng xu</div>
 
         <div class="hexagram-display" id="hexDisplay" aria-live="polite"></div>
 
         <div class="result-box" id="resultBox">
             <h3>Kết quả quẻ</h3>
+
+            <div class="copy-block">
+                <div class="copy-container">
+                    <input type="text" id="summaryText" class="copy-input" readonly aria-label="Tóm tắt kết quả" />
+                    <div class="btn-copy-wrap">
+                        <button type="button" id="btnCopy" class="btn-copy">Sao chép</button>
+                        <span id="copyTooltip" class="copy-tooltip" role="status">Đã sao chép!</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dual-hex" id="dualHex"></div>
+
             <p class="result-row"><strong>Quẻ Chủ:</strong> <span id="queChu"></span></p>
             <p class="result-row"><strong>Hào Động:</strong> <span id="haoDong"></span></p>
             <p class="result-row"><strong>Quẻ Biến:</strong> <span id="queBien"></span></p>
-
-            <div class="copy-block">
-                <label for="summaryText">Tóm tắt kết quả (để copy)</label>
-                <div class="copy-container">
-                    <input type="text" id="summaryText" class="copy-input" readonly />
-                    <button type="button" id="btnCopy" class="btn-copy">Sao chép</button>
-                </div>
-                <div id="copyMsg" class="copy-msg">Đã sao chép vào bộ nhớ tạm.</div>
-            </div>
         </div>
     </main>
 
@@ -407,17 +591,25 @@ const HEXAGRAMS = {
 };
 
 const LINE_LABELS = ["Hào 1", "Hào 2", "Hào 3", "Hào 4", "Hào 5", "Hào 6"];
+const CAST_DELAY_MS = 480;
 
 let currentLines = [];
+let casting = false;
 
 const btnCast = document.getElementById("btnCast");
 const btnCopy = document.getElementById("btnCopy");
 const hexDisplay = document.getElementById("hexDisplay");
+const coinsEl = document.getElementById("coins");
+const coinsSum = document.getElementById("coinsSum");
+const progressTrack = document.getElementById("progressTrack");
+const copyTooltip = document.getElementById("copyTooltip");
 
 btnCast.addEventListener("click", castLine);
 btnCopy.addEventListener("click", copySummary);
 
 initSlots();
+updateProgress();
+resetCoinsIdle();
 
 function initSlots() {
     hexDisplay.innerHTML = "";
@@ -434,18 +626,67 @@ function initSlots() {
     }
 }
 
-function castLine() {
+function updateProgress() {
+    const steps = progressTrack.querySelectorAll(".progress-step");
+    steps.forEach((step, i) => {
+        step.classList.remove("done", "current");
+        if (i < currentLines.length) step.classList.add("done");
+        else if (i === currentLines.length && currentLines.length < 6) step.classList.add("current");
+    });
+}
+
+function resetCoinsIdle() {
+    coinsEl.querySelectorAll(".coin").forEach((coin) => {
+        coin.className = "coin idle";
+        coin.innerHTML = `<span class="coin-face">—</span><span class="coin-val">?</span>`;
+    });
+    coinsSum.textContent = "Nhấn Gieo Hào để tung 3 đồng xu";
+}
+
+function showCoins(values) {
+    const coins = coinsEl.querySelectorAll(".coin");
+    values.forEach((val, i) => {
+        const coin = coins[i];
+        const isYang = val === 3;
+        coin.className = `coin flip ${isYang ? "yang" : "yin"}`;
+        coin.innerHTML = `
+            <span class="coin-face">${isYang ? "Dương" : "Âm"}</span>
+            <span class="coin-val">${val}</span>
+        `;
+        coin.addEventListener("animationend", () => coin.classList.remove("flip"), { once: true });
+    });
+    const sum = values.reduce((a, b) => a + b, 0);
+    const typeName =
+        sum === 6 ? "Lão Âm (X)" :
+        sum === 7 ? "Thiếu Dương" :
+        sum === 8 ? "Thiếu Âm" :
+        "Lão Dương (O)";
+    coinsSum.textContent = `${values.join(" + ")} = ${sum} → ${typeName}`;
+}
+
+async function castLine() {
+    if (casting) return;
+
     if (currentLines.length >= 6) {
         resetAll();
     }
 
-    const coin1 = Math.random() < 0.5 ? 2 : 3;
-    const coin2 = Math.random() < 0.5 ? 2 : 3;
-    const coin3 = Math.random() < 0.5 ? 2 : 3;
-    const sum = coin1 + coin2 + coin3;
+    casting = true;
+    btnCast.disabled = true;
+
+    const values = [
+        Math.random() < 0.5 ? 2 : 3,
+        Math.random() < 0.5 ? 2 : 3,
+        Math.random() < 0.5 ? 2 : 3
+    ];
+    const sum = values[0] + values[1] + values[2];
+
+    showCoins(values);
+    await wait(CAST_DELAY_MS);
 
     currentLines.push(sum);
     fillSlot(currentLines.length - 1, sum);
+    updateProgress();
 
     if (currentLines.length === 6) {
         btnCast.textContent = "Gieo Quẻ Mới";
@@ -453,6 +694,13 @@ function castLine() {
     } else {
         btnCast.textContent = `Gieo Hào (${currentLines.length}/6)`;
     }
+
+    casting = false;
+    btnCast.disabled = false;
+}
+
+function wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function fillSlot(idx, val) {
@@ -481,6 +729,17 @@ function fillSlot(idx, val) {
         <div class="line-bar">${barHtml}</div>
         <span class="line-type">${typeName}</span>
     `;
+}
+
+function miniHexHtml(bits, movingSet) {
+    // bits[0]=hào1 ... bits[5]=hào6; render column-reverse via CSS
+    return bits.map((bit, i) => {
+        const moving = movingSet.has(i + 1) ? "moving" : "";
+        if (bit === 1) {
+            return `<div class="mini-line"><div class="yang ${moving}"></div></div>`;
+        }
+        return `<div class="mini-line"><div class="yin"><div class="${moving}"></div><div class="${moving}"></div></div></div>`;
+    }).join("");
 }
 
 function calculateResult() {
@@ -528,8 +787,35 @@ function calculateResult() {
             : `${nameQueChu} (Tĩnh - Không có hào động)`;
 
     document.getElementById("summaryText").value = summaryText;
+
+    const movingSet = new Set(movingLines);
+    const dual = document.getElementById("dualHex");
+    const chuCard = `
+        <div class="hex-card">
+            <div class="hex-card-title">Quẻ Chủ</div>
+            <div class="hex-card-name">${nameQueChu}</div>
+            <div class="hex-card-trigrams">${chuNgoai} trên · ${chuNoi} dưới</div>
+            <div class="mini-hex">${miniHexHtml(chuBit, movingSet)}</div>
+        </div>
+    `;
+
+    if (movingLines.length > 0) {
+        dual.className = "dual-hex has-bien";
+        dual.innerHTML = chuCard + `
+            <div class="hex-card">
+                <div class="hex-card-title">Quẻ Biến</div>
+                <div class="hex-card-name">${nameQueBien}</div>
+                <div class="hex-card-trigrams">${bienNgoai} trên · ${bienNoi} dưới</div>
+                <div class="mini-hex">${miniHexHtml(bienBit, new Set())}</div>
+            </div>
+        `;
+    } else {
+        dual.className = "dual-hex";
+        dual.innerHTML = chuCard;
+    }
+
     document.getElementById("resultBox").classList.add("visible");
-    document.getElementById("copyMsg").classList.remove("show");
+    copyTooltip.classList.remove("show");
 }
 
 function copySummary() {
@@ -538,9 +824,9 @@ function copySummary() {
     if (!text) return;
 
     const showOk = () => {
-        const msg = document.getElementById("copyMsg");
-        msg.classList.add("show");
-        setTimeout(() => msg.classList.remove("show"), 2000);
+        copyTooltip.classList.add("show");
+        clearTimeout(copySummary._t);
+        copySummary._t = setTimeout(() => copyTooltip.classList.remove("show"), 1800);
     };
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -559,9 +845,13 @@ function copySummary() {
 function resetAll() {
     currentLines = [];
     initSlots();
+    updateProgress();
+    resetCoinsIdle();
     document.getElementById("resultBox").classList.remove("visible");
     document.getElementById("summaryText").value = "";
-    document.getElementById("copyMsg").classList.remove("show");
+    document.getElementById("dualHex").innerHTML = "";
+    document.getElementById("dualHex").className = "dual-hex";
+    copyTooltip.classList.remove("show");
     btnCast.textContent = "Gieo Hào (0/6)";
 }
 </script>
