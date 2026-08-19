@@ -23,4 +23,4 @@ Sau đó mở địa chỉ hiện ra trên terminal (thường là `http://local
 1. Khung 6 hào hiện sẵn; nhấn **Gieo Hào** (nút cố định giữa đáy màn hình) để điền từng hào từ Sơ → Thượng.
 2. Xem kết quả: Quẻ Chủ, Hào Động, Quẻ Biến.
 3. Sao chép chuỗi tóm tắt, ví dụ: `Thủy Phong Tỉnh động hào 2 biến Thủy Sơn Kiển`.
-4. Nhấn **Gieo Hào** thêm một lần để bắt đầu quẻ mới (gieo luôn hào 1).
+4. Khi đủ 6 hào, nút đổi thành **Gieo Quẻ Mới** — nhấn để bắt đầu quẻ mới (gieo luôn hào 1).
