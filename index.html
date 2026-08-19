@@ -331,19 +331,20 @@
         .copy-tooltip {
             position: absolute;
             left: 50%;
-            bottom: calc(100% + 8px);
-            transform: translateX(-50%) translateY(4px);
-            background: var(--ink);
-            color: #f7f1e8;
-            font-size: 0.72rem;
-            font-weight: 600;
-            padding: 6px 10px;
+            bottom: calc(100% + 10px);
+            transform: translateX(-50%) translateY(6px);
+            background: #1f4d32;
+            color: #f3fff6;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 8px 12px;
             border-radius: 2px;
             white-space: nowrap;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease, transform 0.2s ease;
             z-index: 5;
+            box-shadow: 0 6px 16px rgba(26, 21, 16, 0.2);
         }
 
         .copy-tooltip::after {
@@ -353,12 +354,16 @@
             left: 50%;
             margin-left: -5px;
             border: 5px solid transparent;
-            border-top-color: var(--ink);
+            border-top-color: #1f4d32;
         }
 
         .copy-tooltip.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
+        }
+
+        .btn-copy.copied {
+            background: #163824;
         }
 
         /* Dual hexagram visuals */
@@ -825,8 +830,15 @@ function copySummary() {
 
     const showOk = () => {
         copyTooltip.classList.add("show");
+        btnCopy.classList.add("copied");
+        const prev = btnCopy.textContent;
+        btnCopy.textContent = "Đã chép!";
         clearTimeout(copySummary._t);
-        copySummary._t = setTimeout(() => copyTooltip.classList.remove("show"), 1800);
+        copySummary._t = setTimeout(() => {
+            copyTooltip.classList.remove("show");
+            btnCopy.classList.remove("copied");
+            btnCopy.textContent = prev;
+        }, 2200);
     };
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
