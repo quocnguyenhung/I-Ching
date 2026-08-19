@@ -109,10 +109,10 @@
     }
     .coin.idle { opacity: 0.45; }
     .coin.idle .coin-inner { transform: rotateY(0deg); }
-    .coin.yang .coin-inner { transform: rotateY(0deg); }
-    .coin.yin .coin-inner { transform: rotateY(180deg); }
+    .coin.coin-yang .coin-inner { transform: rotateY(0deg); }
+    .coin.coin-yin .coin-inner { transform: rotateY(180deg); }
     .coin.flip .coin-inner { animation: coinFlipYang 1s cubic-bezier(0.22, 0.7, 0.3, 1) both; }
-    .coin.flip.yin .coin-inner { animation-name: coinFlipYin; }
+    .coin.flip.coin-yin .coin-inner { animation-name: coinFlipYin; }
     .coin:nth-child(2).flip .coin-inner { animation-delay: 0.05s; }
     .coin:nth-child(3).flip .coin-inner { animation-delay: 0.1s; }
     .coin-face {
@@ -296,9 +296,26 @@
         background: linear-gradient(0deg, var(--paper) 60%, rgba(246, 243, 237, 0) 100%);
         display: flex;
         justify-content: center;
+        align-items: center;
+        gap: 10px;
         pointer-events: none;
     }
     .cast-bar button { pointer-events: auto; }
+    #btnReset {
+        display: none;
+        flex: 0 0 auto;
+        border: 1px solid var(--paper-dark);
+        background: var(--paper);
+        color: var(--ink-soft);
+        font-family: inherit;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 10px 12px;
+        border-radius: 50px;
+        cursor: pointer;
+    }
+    #btnReset.visible { display: block; }
+    #btnReset:disabled { opacity: 0.5; cursor: wait; }
     #btnCast {
         background: var(--cinnabar);
         color: white;
@@ -358,6 +375,7 @@
         .result-row { margin: 6px 0; font-size: 0.82rem; padding-bottom: 6px; }
         --cast-bar-h: 78px;
         #btnCast { font-size: 1rem; padding: 12px 28px; }
+        #btnReset { padding: 10px; font-size: 0.72rem; }
     }
 
     @media (min-width: 768px) {
@@ -433,6 +451,7 @@
         </div>
 
         <div class="cast-bar">
+            <button id="btnReset" type="button" aria-label="Bỏ quẻ hiện tại và bắt đầu lại">Bắt đầu lại</button>
             <button id="btnCast" type="button">Gieo Hào (0/6)</button>
         </div>
     </main>
@@ -469,6 +488,7 @@ let currentLines = [];
 let casting = false;
 
 const btnCast = document.getElementById("btnCast");
+const btnReset = document.getElementById("btnReset");
 const btnCopy = document.getElementById("btnCopy");
 const hexDisplay = document.getElementById("hexDisplay");
 const coinsEl = document.getElementById("coins");
@@ -476,6 +496,7 @@ const progressTrack = document.getElementById("progressTrack");
 const copyTooltip = document.getElementById("copyTooltip");
 
 btnCast.addEventListener("click", castLine);
+btnReset.addEventListener("click", resetAll);
 btnCopy.addEventListener("click", copySummary);
 
 initCoins();
@@ -558,9 +579,9 @@ function showCoins(values) {
     values.forEach((val, i) => {
         const coin = coins[i];
         const isYang = val === 3;
-        coin.classList.remove("flip", "yang", "yin", "idle");
+        coin.classList.remove("flip", "coin-yang", "coin-yin", "idle");
         void coin.offsetWidth;
-        coin.className = `coin flip ${isYang ? "yang" : "yin"}`;
+        coin.className = `coin flip ${isYang ? "coin-yang" : "coin-yin"}`;
         coin.addEventListener("animationend", () => coin.classList.remove("flip"), { once: true });
     });
 }
@@ -581,6 +602,7 @@ async function castLine() {
 
     casting = true;
     btnCast.disabled = true;
+    btnReset.disabled = true;
 
     const values = [
         Math.random() < 0.5 ? 2 : 3,
@@ -596,6 +618,7 @@ async function castLine() {
     fillSlot(currentLines.length - 1, sum);
     updateProgress();
     hapticForSum(sum);
+    btnReset.classList.toggle("visible", currentLines.length > 0 && currentLines.length < 6);
 
     if (currentLines.length === 6) {
         btnCast.textContent = "Gieo Quẻ Mới";
@@ -606,6 +629,7 @@ async function castLine() {
 
     casting = false;
     btnCast.disabled = false;
+    btnReset.disabled = false;
 }
 
 function wait(ms) {
@@ -767,6 +791,7 @@ function resetAll() {
     document.getElementById("dualHex").innerHTML = "";
     document.getElementById("dualHex").className = "dual-hex";
     copyTooltip.classList.remove("show");
+    btnReset.classList.remove("visible");
     btnCast.textContent = "Gieo Hào (0/6)";
 }
 </script>

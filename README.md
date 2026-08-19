@@ -25,3 +25,4 @@ Sau đó mở địa chỉ hiện ra trên terminal (thường là `http://local
 3. Kết quả: thanh **Sao chép** ở đầu khung; khi có hào động hiện song song Quẻ Chủ (trái) và Quẻ Biến (phải). Hào động được nhấn bằng chữ đỏ.
 4. Khi đủ 6 hào, nút đổi thành **Gieo Quẻ Mới** — nhấn để bắt đầu quẻ mới (gieo luôn hào 1).
 5. Máy hỗ trợ rung sẽ rung mạnh khi ra hào động (tổng 6 hoặc 9).
+6. Khi đang gieo dở, nhấn **Bắt đầu lại** để bỏ quẻ hiện tại.
