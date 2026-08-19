@@ -389,16 +389,16 @@ const TRIGRAMS = {
 
 const HEXAGRAMS = {
     "Càn_Càn": "Thuần Càn", "Khôn_Khôn": "Thuần Khôn", "Khảm_Chấn": "Thủy Lôi Truân", "Cấn_Khảm": "Sơn Thủy Mông",
-    "Khảm_Càn": "Thủy Thiên Nhu", "Càn_Khảm": "Thiên Thủy Tụng", "Khảm_Khôn": "Thủy Địa Sư", "Khôn_Khảm": "Địa Thủy Tỷ",
+    "Khảm_Càn": "Thủy Thiên Nhu", "Càn_Khảm": "Thiên Thủy Tụng", "Khảm_Khôn": "Thủy Địa Tỷ", "Khôn_Khảm": "Địa Thủy Sư",
     "Tốn_Càn": "Phong Thiên Tiểu Súc", "Càn_Đoài": "Thiên Trạch Lý", "Khôn_Càn": "Địa Thiên Thái", "Càn_Khôn": "Thiên Địa Bĩ",
     "Càn_Ly": "Thiên Hỏa Đồng Nhân", "Ly_Càn": "Hỏa Thiên Đại Hữu", "Khôn_Cấn": "Địa Sơn Khiêm", "Chấn_Khôn": "Lôi Địa Dự",
-    "Đoài_Chấn": "Trạch Lôi Tùy", "Cấn_Tốn": "Sơn Phong Cổ", "Khôn_Đoài": "Địa Trạch Lâm", "Tốn_Khôn": "Phong Địa Quán",
-    "Ly_Chấn": "Hỏa Lôi Phệ Hạp", "Cấn_Ly": "Sơn Hỏa Bôn", "Cấn_Khôn": "Sơn Địa Bác", "Khôn_Chấn": "Địa Lôi Phục",
+    "Đoài_Chấn": "Trạch Lôi Tùy", "Cấn_Tốn": "Sơn Phong Cổ", "Khôn_Đoài": "Địa Trạch Lâm", "Tốn_Khôn": "Phong Địa Quan",
+    "Ly_Chấn": "Hỏa Lôi Phệ Hạp", "Cấn_Ly": "Sơn Hỏa Bí", "Cấn_Khôn": "Sơn Địa Bác", "Khôn_Chấn": "Địa Lôi Phục",
     "Càn_Chấn": "Thiên Lôi Vô Vọng", "Cấn_Càn": "Sơn Thiên Đại Súc", "Cấn_Chấn": "Sơn Lôi Di", "Đoài_Tốn": "Trạch Phong Đại Quá",
     "Khảm_Khảm": "Thuần Khảm", "Ly_Ly": "Thuần Ly", "Đoài_Cấn": "Trạch Sơn Hàm", "Chấn_Tốn": "Lôi Phong Hằng",
     "Càn_Cấn": "Thiên Sơn Độn", "Chấn_Càn": "Lôi Thiên Đại Tráng", "Khôn_Ly": "Địa Hỏa Minh Di", "Ly_Khôn": "Hỏa Địa Tấn",
     "Tốn_Ly": "Phong Hỏa Gia Nhân", "Ly_Đoài": "Hỏa Trạch Khuê", "Khảm_Cấn": "Thủy Sơn Kiển", "Chấn_Khảm": "Lôi Thủy Giải",
-    "Cấn_Đoài": "Sơn Trạch Tổn", "Tốn_Chấn": "Phong Lôi Ích", "Đoài_Càn": "Trạch Thiên Quái", "Càn_Tốn": "Thiên Phong Cấu",
+    "Cấn_Đoài": "Sơn Trạch Tổn", "Tốn_Chấn": "Phong Lôi Ích", "Đoài_Càn": "Trạch Thiên Quải", "Càn_Tốn": "Thiên Phong Cấu",
     "Đoài_Khôn": "Trạch Địa Tụy", "Khôn_Tốn": "Địa Phong Thăng", "Đoài_Khảm": "Trạch Thủy Khốn", "Khảm_Tốn": "Thủy Phong Tỉnh",
     "Đoài_Ly": "Trạch Hỏa Cách", "Ly_Tốn": "Hỏa Phong Đỉnh", "Chấn_Chấn": "Thuần Chấn", "Cấn_Cấn": "Thuần Cấn",
     "Tốn_Cấn": "Phong Sơn Tiệm", "Chấn_Đoài": "Lôi Trạch Quy Muội", "Chấn_Ly": "Lôi Hỏa Phong", "Ly_Cấn": "Hỏa Sơn Lữ",
@@ -447,10 +447,11 @@ function castLine() {
     currentLines.push(sum);
     fillSlot(currentLines.length - 1, sum);
 
-    btnCast.textContent = `Gieo Hào (${currentLines.length}/6)`;
-
     if (currentLines.length === 6) {
+        btnCast.textContent = "Gieo Quẻ Mới";
         calculateResult();
+    } else {
+        btnCast.textContent = `Gieo Hào (${currentLines.length}/6)`;
     }
 }
 
