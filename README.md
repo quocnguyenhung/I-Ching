@@ -20,7 +20,7 @@ Sau đó mở địa chỉ hiện ra trên terminal (thường là `http://local
 
 ## Cách dùng
 
-1. Khung 6 hào hiện sẵn; nhấn **Gieo Hào** (nút cố định giữa đáy màn hình) để điền từng hào từ Sơ → Thượng.
-2. Xem kết quả: Quẻ Chủ, Hào Động, Quẻ Biến.
-3. Sao chép chuỗi tóm tắt, ví dụ: `Thủy Phong Tỉnh động hào 2 biến Thủy Sơn Kiển`.
-4. Nhấn **Gieo Hào** thêm một lần để bắt đầu quẻ mới (gieo luôn hào 1).
+1. Theo dõi thanh tiến trình **Sơ → Thượng** và 3 đồng xu (Âm = 2, Dương = 3) mỗi lần gieo.
+2. Khung 6 hào hiện sẵn; nhấn **Gieo Hào** (nút cố định giữa đáy màn hình) để điền từng hào.
+3. Kết quả: thanh **Sao chép** ở đầu khung; khi có hào động hiện song song Quẻ Chủ (trái) và Quẻ Biến (phải).
+4. Khi đủ 6 hào, nút đổi thành **Gieo Quẻ Mới** — nhấn để bắt đầu quẻ mới (gieo luôn hào 1).
